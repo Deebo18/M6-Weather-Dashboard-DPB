@@ -3,15 +3,15 @@ var apiKey = "7871e6fa09446cc72f87bdf9ee21b29a";
 var savedSearches = [];
 
 // Creates a list of the previously searched cities
-var searchHistory = function (cityName) {
-  $('.past-search:contains("' + cityName + '")').remove();
+var searchHistoryListing = function(cityName) {
+  $('.previous-search:contains("' + cityName + '")').remove();
 
   var searchPreviousEntries = $("<p>");
   searchPreviousEntries.addClass("previous-search");
   searchPreviousEntries.text(cityName);
 
   var searchEntryContainer = $("<div>");
-  searchEntryContainer.addClass("previous-search-container");
+  searchEntryContainer.addClass("past-search-container");
 
   searchEntryContainer.append(searchPreviousEntries);
 
@@ -20,9 +20,7 @@ var searchHistory = function (cityName) {
 
   if (savedSearches.length > 0) {
     var previousSavedSearches = localStorage.getItem("savedSearches");
-    console.log(previousSavedSearches);
     savedSearches = JSON.parse(previousSavedSearches);
-    console.log(savedSearches);
   }
 
   // Saves a city to the saved searches
@@ -43,13 +41,12 @@ var loadSearchHistory = function () {
   savedSearchHistory = JSON.parse(savedSearchHistory);
 
   for (var i = 0; i < savedSearchHistory.length; i++) {
-    searchHistory(savedSearchHistory[i]);
+    searchHistoryListing(savedSearchHistory[i]);
   }
 };
 
 // Uses the Open Weather API to get data
 var currentWeatherArea = function (cityName) {
-  console.log(cityName);
   fetch(
     `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`
   )
@@ -68,7 +65,7 @@ var currentWeatherArea = function (cityName) {
         })
 
         .then(function (response) {
-          searchHistory(cityName);
+          searchHistoryListing(cityName);
 
           var currentWeatherContainer = $("#current-weather-container");
           currentWeatherContainer.addClass("current-weather-container");
